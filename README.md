@@ -3,6 +3,6 @@
 
 ## JavaScript篇
 
-[JavaScript(一)](https://github.com/Jacky-Summer/Frontend-Interview-Question/blob/master/JS%E7%AF%87(%E4%B8%80).md)
+- [JavaScript面试题（一）](https://github.com/Jacky-Summer/Frontend-Interview-Question/blob/master/JS%E7%AF%87(%E4%B8%80).md)
 
 
