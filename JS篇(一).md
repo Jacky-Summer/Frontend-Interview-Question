@@ -142,11 +142,14 @@ var M = function(name){ this.name = name }
 var o3 = new M("o3")
 ```
 第三种方式，Object.create
+```javascript
 var  p = {name: "p"}
 var o4 = Object.create(p)
+```
 新创建的对o4的原型就是p，同时o4也拥有了属性name
 Object.create()方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__
-16.script标签的defer、async的区别
+
+## 16.script标签的defer、async的区别
 defer是在HTML解析完之后才会执行，如果是多个，按照加载的顺序依次执行
 async是在加载完成后立即执行，如果是多个，执行顺序和加载顺序无关
 
@@ -156,22 +159,163 @@ async是在加载完成后立即执行，如果是多个，执行顺序和加载
 
 当浏览器碰到 script 脚本的时候：
 
-<script src="script.js"></script>
+``` <script src="script.js"></script> ```
 
 没有 defer 或 async，浏览器会立即加载并执行指定的脚本，“立即”指的是在渲染该 script 标签之下的文档元素之前，也就是说不等待后续载入的文档元素，读到就加载并执行。
 
-<script async src="script.js"></script>
+``` <script async src="script.js"></script> ```
 
 有 async，加载和渲染后续文档元素的过程将和 script.js 的加载与执行并行进行（异步）。
 
-<script defer src="myscript.js"></script>
+``` <script defer src="myscript.js"></script> ```
 
 有 defer，加载后续文档元素的过程将和 script.js 的加载并行进行（异步），但是 script.js 的执行要在所有元素解析完成之后，DOMContentLoaded 事件触发之前完成。
 无论使用defer还是async属性，都需要首先将页面中的js文件进行整理，哪些文件之间有依赖性，哪些文件可以延迟加载等等，做好js代码的合并和拆分，然后再根据页面需要使用这两个属性。
-17.script标签如何异步加载？
+
+## 17.script标签如何异步加载？
 默认情况下，浏览器是同步加载 JavaScript 脚本，即渲染引擎遇到 script 标签就会停下来，等到执行完脚本，再继续向下渲染。如果是外部脚本，还必须加入脚本下载的时间。如果脚本体积很大，下载和执行的时间就会很长，因此造成浏览器堵塞，用户会感觉到浏览器“卡死”了，没有任何响应。
+```javascript
 <script src="path/to/myModule.js" defer></script>
 <script src="path/to/myModule.js" async></script>
+```
 defer与async的区别是： 
 defer是“渲染完再执行”，async是“下载完就执行”。
 另外，如果有多个defer脚本，会按照它们在页面出现的顺序加载，而多个async脚本是不能保证加载顺序的。
+
+## 18.介绍js有哪些内置对象？
+
+全局的对象（ global objects ）或称标准内置对象，不要和 "全局对象（global object）" 混淆。这里说的全局的对象是说在
+全局作用域里的对象。
+
+标准内置对象的分类
+
+（1）值属性，这些全局属性返回一个简单值，这些值没有自己的属性和方法。
+     
+    例如 Infinity、NaN、undefined、null 字面量
+
+（2）函数属性，全局函数可以直接调用，不需要在调用时指定所属对象，执行结束后会将结果直接返回给调用者。
+
+    例如 eval()、parseFloat()、parseInt() 等
+ 
+（3）基本对象，基本对象是定义或使用其他对象的基础。基本对象包括一般对象、函数对象和错误对象。
+     
+    例如 Object、Function、Boolean、Object、Array、Number Symbol、Error 等
+
+（4）数字和日期对象，用来表示数字、日期和执行数学计算的对象。
+
+    例如 Number、Math、Date 
+
+（5）字符串，用来表示和操作字符串的对象。
+    
+    例如 String、RegExp
+
+（6）可索引的集合对象，这些对象表示按照索引值来排序的数据集合，包括数组和类型数组，以及类数组结构的对象。例如 Array
+
+（7）使用键的集合对象，这些集合对象在存储数据时会使用到键，支持按照插入顺序来迭代元素。
+     
+    例如 Map、Set、WeakMap、WeakSet
+ 
+（8）矢量集合，SIMD 矢量集合中的数据会被组织为一个数据序列。
+
+    例如 SIMD 等
+
+（9）结构化数据，这些对象用来表示和操作结构化的缓冲区数据，或使用 JSON 编码的数据。
+
+    例如 JSON 等
+
+（10）控制抽象对象
+
+    例如 Promise、Generator 等
+
+（11）反射
+
+    例如 Reflect、Proxy
+
+（12）国际化，为了支持多语言处理而加入 ECMAScript 的对象。
+
+    例如 Intl、Intl.Collator 等
+
+（13）WebAssembly
+
+（14）其他
+
+     例如 arguments
+
+## 19.说几条写JavaScript的基本规范？
+
+1. 不要在同一行声明多个变量。
+2. 请使用 ===/!==来比较true/false或者数值
+3. 使用对象字面量替代new Array这种形式,用{}和[]声明对象和数组
+4. 不要使用全局函数。
+5. Switch语句必须带有default分支
+6. 函数不应该有时候有返回值，有时候没有返回值。
+7. For循环，If语句必须使用大括号
+
+## 20.javascript 代码中的"use strict";是什么意思 ? 使用它区别是什么？
+
+use strict 出现在 JavaScript 代码的顶部或函数的顶部，可以帮助你写出更安全的 JavaScript 代码,这种模式使得 Javascript 在更严格的条件下运行,
+
+1. JS编码更加规范化的模式,消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为。
+   默认支持的糟糕特性都会被禁用，比如不能用with，也不能在意外的情况下给全局变量赋值;
+   全局变量的显性声明,函数必须声明在顶层，不允许在非函数代码块内声明函数,arguments.callee也不允许使用；
+2. 消除代码运行的一些不安全之处，保证代码运行的安全,限制函数中的arguments修改，严格模式下的eval函数的行为和非严格模式的也不相同;
+3. 提高编译器效率，增加运行速度；
+4. 为未来新版本的Javascript标准化做铺垫。
+
+## 21.Javascript中，有一个函数，执行时对象查找时，永远不会去查找原型，这个函数是？
+
+**hasOwnProperty**
+
+javaScript中hasOwnProperty函数方法是返回一个布尔值，指出一个对象是否具有指定名称的属性。此方法无法检查该对象的原型链中是否具有该属性；该属性必须是对象本身的一个成员。
+使用方法：
+```
+object.hasOwnProperty(proName)
+其中参数object是必选项。一个对象的实例。
+proName是必选项。一个属性名称的字符串值。
+```
+如果 object 具有指定名称的属性，那么JavaScript中hasOwnProperty函数方法返回 true，反之则返回 false。
+
+## 22.讲一下let、var、const的区别
+
+- var 没有块级作用域，支持变量提升。
+- let 有块级作用域，不支持变量提升。不允许重复声明，暂存性死区。
+- const 有块级作用域，不支持变量提升，不允许重复声明，暂存性死区。声明一个变量一旦声明就不能改变，改变报错。const保证的变量的内存地址不得改动。
+- const定义时必须赋值，let不必。
+
+## 23.谈谈如何冻结变量
+
+如果想要将对象冻结的话，使用Object.freeze()方法。
+
+Object.freeze() 方法可以冻结一个对象。一个被冻结的对象再也不能被修改；冻结了一个对象则不能向这个对象添加新的属性，不能删除已有属性，不能修改该对象已有属性的可枚举性、可配置性、可写性，以及不能修改已有属性的值。此外，冻结一个对象后该对象的原型也不能被修改。
+```javascript
+const obj = {
+    prop: 42
+};
+
+Object.freeze(obj);
+
+obj.prop = 33;
+// Throws an error in strict mode
+
+console.log(obj.prop);
+// expected output: 42
+```
+
+## 24.谈谈js事件循环机制
+
+JavaScript的执行机制简单来说就先执行同步代码，然后执行异步代码，而异步的代码里面又分为宏任务代码和微任务代码，先执行微任务，然后执行宏任务。首先会将所有JavaScript作为一个宏任务执行，遇到同步的代码就执行，然后开始分配任务，遇到宏任务就将它的回调分配到宏任务的队列里，遇到微任务的回调就分配到微任务的队列里，然后开始执行所有的微任务。执行微任务的过程还是遵循先同步然后分配异步任务的顺序，微任务执行完毕之后，一次Event-Loop的Tick就算完成了。接着挨个去执行分配好的宏任务，在每个宏任务里又先同步后分配异步任务，完成下一次Tick，循环往复直到所有的任务全部执行完成。
+ 
+微任务包括：process.nextTick ，promise ，MutationObserver。
+宏任务包括：script ， setTimeout ，setInterval ，setImmediate ，I/O ，UI rendering。
+
+## 25.Number('123')和new Number('123')有什么区别？
+
+Number('123')是一个转换函数，会尝试把参数转为整数类型；而new Number('123')则不同，这是一个构造函数，它的结果是实例化出来一个对象。
+```
+typeof Number('123') // number
+typeof new Number('123') // object
+```
+
+## 26.在类型转换中哪些值会被转为true？
+
+除了undefined、null、false、NaN、''、0、-0以外的值都会被转为true，包括所有引用类型，即使是空的。
