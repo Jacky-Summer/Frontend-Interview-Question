@@ -415,3 +415,74 @@ console.log(isInt(4)); // true
 console.log(isInt(12.2)); // false
 console.log(isInt(0.3)); // false
 ```
+
+## 35. 什么是 IIFE（立即调用函数表达式）？
+
+它是立即调用函数表达式（Immediately-Invoked Function Expression），简称 IIFE。函数被创建后立即被执行：
+```javascript
+(function IIFE(){
+    console.log( "Hello!" );
+})();
+// "Hello!"
+```
+
+## 36. “Transpiling”是什么意思？
+
+对于语言中新加入的语法，无法进行 polyfill。因此，更好的办法是使用一种工具，可以将较新代码转换为较旧的等效代码。这个过程通常称为转换（transpiling），就是 transforming + compiling 的意思。
+ 
+通常，你会将转换器（transpiler）加入到构建过程中，类似于 linter 或 minifier。现在有很多很棒的转换器可选择：
+
+- Babel：将 ES6+ 转换为 ES5
+- Traceur：将 ES6、ES7 转换为 ES5
+
+## 37. 如何拦截变量属性
+
+使用proxy。new Proxy() 表示生成一个 Proxy 实例，target 参数表示所要拦截的目标对象，handler 参数也是一个对象，用来定制拦截行为。
+```javascript
+var proxy = new Proxy({}, {
+  get: function(target, property) {
+    return 35;
+  }
+});
+let obj = Object.create(proxy);
+obj.time // 35
+```
+
+## 38. 解释一下变量的提升
+
+变量的提升是JavaScript的默认行为，这意味着将所有变量声明移动到当前作用域的顶部，并且可以在声明之前使用变量。初始化不会被提升，提升仅作用于变量的声明。
+```javascript
+var x = 1
+console.log(x + '——' + y) // 1——undefined
+var y = 2
+```
+
+## 39. 什么是堆？什么是栈？它们之间有什么区别和联系？
+
+堆和栈的概念存在于数据结构中和操作系统内存中。
+
+在数据结构中，栈中数据的存取方式为先进后出。而堆是一个优先队列，是按优先级来进行排序的，优先级可以按照大小来规定。完全二叉树是堆的一种实现方式。 
+
+在操作系统中，内存被分为栈区和堆区。
+
+栈区内存由编译器自动分配释放，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。
+
+堆区内存一般由程序员分配释放，若程序员不释放，程序结束时可能由垃圾回收机制回收。
+
+## 40. 内部属性 [[Class]] 是什么?
+
+所有 typeof 返回值为 "object" 的对象（如数组）都包含一个内部属性 [[Class]]（我们可以把它看作一个内部的分类，而非
+传统的面向对象意义上的类）。这个属性无法直接访问，一般通过 Object.prototype.toString(..) 来查看。例如：
+```javascript
+ Object.prototype.toString.call( [1,2,3] );
+ // "[object Array]"
+
+ Object.prototype.toString.call( /regex-literal/i );
+ // "[object RegExp]"
+ ```
+
+ ## 41. isNaN 和 Number.isNaN 函数的区别？
+
+ 函数 isNaN 接收参数后，会尝试将这个参数转换为数值，任何不能被转换为数值的的值都会返回 true，因此非数字值传入也会返回 true ，会影响 NaN 的判断。
+
+ 函数 Number.isNaN 会首先判断传入参数是否为数字，如果是数字再继续判断是否为 NaN ，这种方法对于 NaN 的判断更为 准确。
