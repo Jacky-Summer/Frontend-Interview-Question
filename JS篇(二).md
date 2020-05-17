@@ -215,3 +215,60 @@ define(function (require, exports, module) {
 - 迭代方法 every()、some()、filter()、map() 和 forEach() 方法
 
 - 数组归并方法 reduce() 和 reduceRight() 方法
+
+65. requireJS 的核心原理是什么？（如何动态加载的？如何避免多次加载的？如何 缓存的？）
+
+require.js 的核心原理是通过动态创建 script 脚本来异步引入模块，然后对每个脚本的 load 事件进行监听，如果每个脚本都加载完成了，再调用回调函数。
+
+66. 如何判断当前脚本运行在浏览器还是 node 环境中？
+
+```javascript
+this === window ? 'browser' : 'node'
+```
+
+通过判断 Global 对象是否为 window，如果不为 window，当前脚本没有运行在浏览器中。
+
+67. 移动端的点击事件的有延迟，时间是多久，为什么会有？ 怎么解决这个延时？
+
+移动端点击有 300ms 的延迟是因为移动端会有双击缩放的这个操作，因此浏览器在 click 之后要等待 300ms，看用户有没有下一次点击，来判断这次操作是不是双击。
+
+1. 通过 meta 标签禁用网页的缩放。
+2. 通过 meta 标签将网页的 viewport 设置为 ideal viewport。
+3. 调用一些 js 库，比如 FastClick
+
+click 延时问题还可能引起点击穿透的问题，就是如果我们在一个元素上注册了 touchStart 的监听事件，这个事件会将这个元素隐藏掉，我们发现当这个元素隐藏后，触发了这个元素下的一个元素的点击事件，这就是点击穿透。
+
+68. 什么是 Polyfill ？
+
+Polyfill 指的是用于实现浏览器并不支持的原生 API 的代码。
+
+比如说 querySelectorAll 是很多现代浏览器都支持的原生 Web API，但是有些古老的浏览器并不支持，那么假设有人写了一段代码来实现这个功能使这些浏览器也支持了这个功能，那么这就可以成为一个 Polyfill。
+
+一个 shim 是一个库，有自己的 API，而不是单纯实现原生不支持的 API。
+
+69. Object.is() 与原来的比较操作符 “===”、“==” 的区别？
+
+使用双等号进行相等判断时，如果两边的类型不一致，则会进行强制类型转化后再进行比较。
+
+使用三等号进行相等判断时，如果两边的类型不一致时，不会做强制类型准换，直接返回 false。
+
+使用 Object.is 来进行相等判断时，一般情况下和三等号的判断相同，它处理了一些特殊的情况，比如 -0 和 +0 不再相等，两个 NaN 认定为是相等的。
+
+70. toPrecision 和 toFixed 和 Math.round 的区别？
+
+- toPrecision 用于处理精度，精度是从左至右第一个不为 0 的数开始数起。
+- toFixed 是对小数点后指定位数取整，从小数点开始数起。可把 Number 四舍五入为指定小数位数的数字。( toFixed()生成的是字符串而不是数字)
+- Math.round 是将一个数字四舍五入到一个整数
+
+```javascript
+var num = new Number(13.3714)
+var a = num.toPrecision() // 13.3714
+var b = num.toPrecision(2) // 13
+var c = num.toPrecision(3) // 13.4
+var d = num.toPrecision(10) // 13.37140000
+
+var num = 5.56789
+var n = num.toFixed(2) // 5.57
+
+Math.round(2.5) // 3
+```
