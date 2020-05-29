@@ -403,3 +403,65 @@ typeof y // 值是undefined,不会报错
 
 - 原型特点：
   JavaScript 对象是通过引用来传递的，当修改原型时，与之相关的对象也会继承这一改变
+
+78. 如何正确的判断 this? 箭头函数的 this 是什么？
+
+- this 的绑定规则有四种：默认绑定，隐式绑定，显式绑定，new 绑定.
+
+- 函数是否在 new 中调用(new 绑定)，如果是，那么 this 绑定的是新创建的对象【前提是构造函数中没有返回对象或者是 function，否则 this 指向返回的对象/function】。
+- 函数是否通过 call,apply 调用，或者使用了 bind (即硬绑定)，如果是，那么 this 绑定的就是指定的对象。
+- 函数是否在某个上下文对象中调用(隐式绑定)，如果是的话，this 绑定的是那个上下文对象。一般是 obj.foo()
+- 如果以上都不是，那么使用默认绑定。如果在严格模式下，则绑定到 undefined，否则绑定到全局对象。
+- 如果把 null 或者 undefined 作为 this 的绑定对象传入 call、apply 或者 bind, 这些值在调用时会被忽略，实际应用的是默认绑定规则。
+- 箭头函数没有自己的 this, 它的 this 继承于上一层代码块的 this。
+
+79. 如何判断一个变量是不是数组？
+
+- 使用 Array.isArray 判断，如果返回 true, 说明是数组
+
+- 使用 instanceof Array 判断，如果返回 true, 说明是数组
+
+- 使用 Object.prototype.toString.call 判断，如果值是 [object Array], 说明是数组
+
+- 通过 constructor 来判断，如果是数组，那么 arr.constructor === Array. (不准确，因为我们可以指定 obj.constructor = Array)
+
+```javascript
+function fn() {
+  console.log(Array.isArray(arguments)) //false; 因为arguments是类数组，但不是数组
+  console.log(Array.isArray([1, 2, 3, 4])) //true
+  console.log(arguments instanceof Array) //false
+  console.log([1, 2, 3, 4] instanceof Array) //true
+  console.log(Object.prototype.toString.call(arguments)) //[object Arguments]
+  console.log(Object.prototype.toString.call([1, 2, 3, 4])) //[object Array]
+  console.log(arguments.constructor === Array) //false
+  arguments.constructor = Array
+  console.log(arguments.constructor === Array) //true
+}
+fn(1, 2, 3, 4)
+```
+
+80. 在一个 DOM 上同时绑定两个点击事件：一个用捕获，一个用冒泡。事件会执行几次，先执行冒泡还是捕获？
+
+- 该 DOM 上的事件如果被触发，会执行两次（执行次数等于绑定次数）
+- 如果该 DOM 是目标元素，则按事件绑定顺序执行，不区分冒泡/捕获
+- 如果该 DOM 是处于事件流中的非目标元素，则先执行捕获，后执行冒泡
+
+81. 原始数据类型和复杂数据类型有什么区别？
+
+- 内存的分配不同
+
+1. 基本数据类型存储在栈中。
+2. 复杂数据类型存储在堆中，栈中存储的变量，是指向堆中的引用地址。
+
+- 访问机制不同
+
+1. 基本数据类型是按值访问
+2. 复杂数据类型按引用访问，JS 不允许直接访问保存在堆内存中的对象，在访问一个对象时，首先得到的是这个对象在栈内存中的地址，然后再按照这个地址去获得这个对象中的值。
+
+- 复制变量时不同(a=b)
+
+1. 基本数据类型：a=b;是将 b 中保存的原始值的副本赋值给新变量 a，a 和 b 完全独立，互不影响
+2. 复杂数据类型：a=b;将 b 保存的对象内存的引用地址赋值给了新变量 a;a 和 b 指向了同一个堆内存地址，其中一个值发生了改变，另一个也会改变
+
+- 参数传递的不同(实参/形参)
+  函数传参都是按值传递(栈中的存储的内容)：基本数据类型，拷贝的是值；复杂数据类型，拷贝的是引用地址
