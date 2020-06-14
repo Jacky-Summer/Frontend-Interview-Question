@@ -465,3 +465,76 @@ fn(1, 2, 3, 4)
 
 - 参数传递的不同(实参/形参)
   函数传参都是按值传递(栈中的存储的内容)：基本数据类型，拷贝的是值；复杂数据类型，拷贝的是引用地址
+
+82. 介绍 DOM0，DOM2，DOM3 事件处理方式区别
+
+- DOM0 级事件处理方式：
+  - btn.onclick = func;
+  - btn.onclick = null;
+- DOM2 级事件处理方式：
+  - btn.addEventListener('click', func, false);
+  - btn.removeEventListener('click', func, false);
+  - btn.attachEvent("onclick", func);
+  - btn.detachEvent("onclick", func);
+- DOM3 级事件处理方式：
+  - eventUtil.addListener(input, "textInput", func);
+  - eventUtil 是自定义对象，textInput 是 DOM3 级事件
+
+83. 区分什么是“客户区坐标”、“页面坐标”、“屏幕坐标”？
+
+- 客户区坐标：鼠标指针在可视区中的水平坐标(clientX)和垂直坐标(clientY)
+- 页面坐标：鼠标指针在页面布局中的水平坐标(pageX)和垂直坐标(pageY)
+- 屏幕坐标：设备物理屏幕的水平坐标(screenX)和垂直坐标(screenY)
+
+84. 类数组和数组的区别是什么？
+
+类数组：
+
+1. 拥有 length 属性，其它属性（索引）为非负整数（对象中的索引会被当做字符串来处理）;
+2. 不具有数组所具有的方法；
+
+类数组是一个普通对象，而真实的数组是 Array 类型。
+
+常见的类数组有: 函数的参数 arguments, DOM 对象列表(比如通过 document.querySelectorAll 得到的列表), jQuery 对象 (比如 \$("div")).
+
+类数组可以转换为数组:
+
+```javascript
+//第一种方法
+Array.prototype.slice.call(arrayLike, start)
+//第二种方法
+;[...arrayLike]
+//第三种方法:
+Array.from(arrayLike)
+```
+
+85. [] == ![] 是 true 还是 false？
+
+[] 引用类型转换成布尔值都是 true,因此![]的是 false
+
+根据（判断其中一方是否为 boolean, 如果是, 将 boolean 转为 number 再进行判断），false 转换成 number，对应的值是 0.
+
+根据（判断其中一方是否为 object 且另一方为 string、number 或者 symbol , 如果是, 将 object 转为原始类型再进行判断），有一方是 number，那么将 object 也转换成 Number,空数组转换成数字，对应的值是 0.(空数组转换成数字，对应的值是 0，如果数组中只有一个数字，那么转成 number 就是这个数字，其它情况，均为 NaN)
+
+0 == 0; 为 true
+
+86. ES6 中的 class 和 ES5 的类有什么区别？
+
+- ES6 class 内部所有定义的方法都是不可枚举的;
+- ES6 class 必须使用 new 调用;
+- ES6 class 不存在变量提升;
+- ES6 class 默认即是严格模式;
+- ES6 class 子类必须在构造函数中调用 super()，这样才有 this 对象;ES5 中类继承的关系是相反的，先有子类的 this，然后用父类的方法应用在 this 上。
+
+87. 数组的哪些 API 会改变原数组？
+
+- 修改原数组的 API 有:
+  `splice/reverse/fill/copyWithin/sort/push/pop/unshift/shift`
+- 不修改原数组的 API 有:
+  `slice/map/forEach/every/filter/reduce/entries/find`
+  注: 数组的每一项是简单数据类型，且未直接操作数组的情况下
+
+88. 词法作用域和 this 的区别
+
+- 词法作用域是由你在写代码时将变量和块作用域写在哪里来决定的
+- this 是在调用时被绑定的，this 指向什么，完全取决于函数的调用位置
